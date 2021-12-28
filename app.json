@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "eas-gh-actions",
-    "slug": "eas-gh-actions",
+    "name": "eas-gha",
+    "slug": "eas-gha",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
