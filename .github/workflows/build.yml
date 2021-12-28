@@ -39,13 +39,20 @@ jobs:
     - name: 📋 Test project
       run: yarn test
     - name: 👷 Build app
-      run: eas build --local --json --non-interactive --platform=${{ github.event.inputs.platform }} --profile=${{ github.event.inputs.profile }}
+      run: eas build --local --non-interactive --platform=${{ github.event.inputs.platform }} --profile=${{ github.event.inputs.profile }}
+    - name: 🎁 Prepare binary
+      # This is unfortunate but artifacts can't have colon in their names
+      # See: https://github.com/expo/eas-build/issues/64
+      run: |
+        mv *.apk app.apk || true
+        mv *.aab app.aab || true
+        mv *.ipa app.ipa || true
     - name: 📱 Upload binary
       uses: actions/upload-artifact@v2
       with:
         name: app-${{ github.event.inputs.platform }}
         path: |
-          *.apk
-          *.aab
-          *.ipa
+          app.apk
+          app.aab
+          app.ipa
       
