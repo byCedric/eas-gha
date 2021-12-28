@@ -1,0 +1,51 @@
+name: Build App
+on:
+  workflow_dispatch:
+    inputs:
+      platform:
+        type: choice
+        description: Platform to build for
+        options:
+          - android
+          - ios
+      profile:
+        type: choice
+        description: Build profile to use
+        options:
+          - development
+          - preview
+          - production
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [16.x]
+    steps:
+    - name: 🏗 Setup repo
+      uses: actions/checkout@v2
+    - name: 🏗 Setup Node
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node }}
+    - name: 🏗 Setup EAS
+      uses: expo/expo-github-action@v6
+      with:
+        token: ${{ secrets.EXPO_TOKEN }}
+        eas-version: latest
+        eas-cache: true
+    - name: 📦 Install dependencies
+      run: yarn
+    - name: 📋 Test project
+      run: yarn test
+    - name: 👷 Build app
+      run: eas build --local --json --non-interactive --platform=${{ github.event.inputs.platform }} --profile=${{ github.event.inputs.profile }}
+    - name: 📱 Upload binary
+      uses: actions/upload-artifact@v2
+      with:
+        name: app-${{ github.event.inputs.platform }}
+        path: |
+          *.apk
+          *.aab
+          *.ipa
+      
