@@ -2,6 +2,12 @@ name: Build App
 on:
   workflow_dispatch:
     inputs:
+      os:
+        type: choice
+        description: OS to build on. Ubuntu is faster, MacOS supports iOS builds, Windows is unsupported
+        options:
+          - macos-latest
+          - ubuntu-latest
       platform:
         type: choice
         description: Platform to build for
@@ -17,7 +23,7 @@ on:
           - production
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: ${{ github.event.inputs.os }}
     strategy:
       matrix:
         node: [16.x]
