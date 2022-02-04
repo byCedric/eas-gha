@@ -38,6 +38,9 @@ jobs:
         expo-version: latest
         eas-version: latest
 
+    - name: 🏗 Setup EAS local builds
+      run: yarn global add eas-cli-local-build-plugin
+
     - name: 📦 Install dependencies
       run: yarn
 
@@ -46,10 +49,11 @@ jobs:
 
     - name: 👷 Build app
       run: |
-        eas build --local --non-interactive \
-        --output=./app-build \
-        --platform=${{ github.event.inputs.platform }} \
-        --profile=${{ github.event.inputs.profile }}
+        eas build --local \
+          --non-interactive \
+          --output=./app-build \
+          --platform=${{ github.event.inputs.platform }} \
+          --profile=${{ github.event.inputs.profile }}
 
     - name: 📱 Upload binary
       uses: actions/upload-artifact@v2
