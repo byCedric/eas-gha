@@ -24,35 +24,35 @@ jobs:
     steps:
     - name: 🏗 Setup repo
       uses: actions/checkout@v2
+
     - name: 🏗 Setup Node
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node }}
-    - name: 🏗 Setup EAS
-      uses: expo/expo-github-action@v6
+
+    - name: 🏗 Setup Expo and EAS
+      uses: expo/expo-github-action@v7
       with:
         token: ${{ secrets.EXPO_TOKEN }}
+        expo-version: latest
         eas-version: latest
-        eas-cache: true
+
     - name: 📦 Install dependencies
       run: yarn
+
     - name: 📋 Test project
       run: yarn test
+
     - name: 👷 Build app
-      run: eas build --local --non-interactive --platform=${{ github.event.inputs.platform }} --profile=${{ github.event.inputs.profile }}
-    - name: 🎁 Prepare binary
-      # This is unfortunate but artifacts can't have colon in their names
-      # See: https://github.com/expo/eas-build/issues/64
       run: |
-        mv *.apk app.apk || true
-        mv *.aab app.aab || true
-        mv *.ipa app.ipa || true
+        eas build --local --non-interactive \
+        --output=./app-build \
+        --platform=${{ github.event.inputs.platform }} \
+        --profile=${{ github.event.inputs.profile }}
+
     - name: 📱 Upload binary
       uses: actions/upload-artifact@v2
       with:
         name: app-${{ github.event.inputs.platform }}
-        path: |
-          app.apk
-          app.aab
-          app.ipa
+        path: app-build
       
