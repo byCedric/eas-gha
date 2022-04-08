@@ -47,6 +47,9 @@ jobs:
     - name: 🏗 Setup EAS local builds
       run: yarn global add eas-cli-local-build-plugin
 
+    - name: 🏗 Install Sharp CLI for EAS image generation
+      run: yarn global add sharp-cli
+
     - name: 📦 Install dependencies
       run: yarn
 
