@@ -44,9 +44,6 @@ jobs:
         expo-version: latest
         eas-version: latest
 
-    - name: 🏗 Setup EAS local builds
-      run: yarn global add eas-cli-local-build-plugin
-
     - name: 📦 Install dependencies
       run: yarn
 
